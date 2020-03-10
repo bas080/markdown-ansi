@@ -1,0 +1,92 @@
+#!/usr/bin/env perl
+
+# author:  Bas Huis
+# website: https://github.com/bas080/markdown-ansi
+# created: Sun Mar  8 23:55:46 CET 2020
+# changed: Sun Mar  8 23:55:43 CET 2020
+# license: GNU General Public License 3.0
+
+use Term::ANSIColor;
+
+my $mode;
+
+while (my $line = <>) {
+  chomp($line);
+
+  my ($out, $i, $m) = ansi($line, color('reset'), $mode);
+
+  $mode = $m;
+
+  print($out . "\n");
+}
+
+# TODO: for code blocks create a temp file and pass as argument to the
+# formatting program
+
+sub ansi {
+  my ($line, $i , $mode) = @_;
+
+  if ($mode eq "code") {
+    return ($line =~ m/^\`\`\`/)
+      ? ('', '')
+      : ($line, $i, $mode);
+      # should instead feed into a code format program
+  }
+
+  # Four spaces code block
+  if ($line =~ m/    /) {
+    return ($line, '', '')
+  }
+
+  # Start the code block mode.
+  if ($line =~ m/^\`\`\`/) {
+    return ('', '', "code");
+  }
+
+  return
+    ansi_format('`' , color('black on_white'),
+
+    ansi_format('~~', "\e[9m", # Term::ANSIColor does not have strikethrough.
+
+    ansi_format('\*', color('italic'),
+    ansi_format('\_', color('italic'),
+
+    ansi_format('\*\*', color('bold'),
+    ansi_format('__' ,  color('bold') ,
+
+    ansi_format('\*\*\*', color('bold italic'),
+    ansi_format('___' ,   color('bold italic') ,
+
+    ansi_format('^> ' , color('faint'),
+    ansi_format('^#+ ', color('blue'),
+    ansi_format('^#+ ', color('blue'),
+    ansi_format('^## ' , color('bold blue'),
+    ansi_format('^# ' , color('bold yellow'),
+    @_)))))))))))));
+}
+
+sub ansi_format {
+  my $match=shift;
+  my $code=shift;
+  my ($line, $parent)=@_;
+
+  my @pieces = split($match, $line);
+
+  # In case no match was found.
+  if ($#pieces eq 0) {
+    return @_;
+  }
+
+  $line="";
+
+  while (my ($i, $el) = each @pieces) {
+    if ($i % 2 eq 1) {
+      my ($formatted) = ansi($el, $code);
+      $line=$line . $code . $formatted . color('reset') . $parent;
+    } else {
+      $line=$line . $el;
+    }
+  }
+
+  return ($line, $parent);
+}

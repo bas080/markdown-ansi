@@ -1,0 +1,53 @@
+[1;33mMarkdown ANSI[0m[0m
+
+Who says I can't have nice looking markdown?
+
+[30;47mmarkdown-ansi[0m[0m will [1mprint[0m[0m ansi formatted [1mmarkdown[0m[0m to your
+[1;3mterminal[0m[0m.
+
+[1;34mUsage[0m[0m
+
+
+# Supply markdown text to STDIN.
+
+markdown-ansi < ./README.md
+
+# or pass a file as an option.
+
+markdown-ansi ./README.md
+
+# For more help see the help page
+
+markdown-ansi --help
+
+
+[1;34mFeatures[0m[0m
+
+[34mText[0m[0m
+
+- [3mItalic[0m[0m
+- [1mBold[0m[0m
+- [30;47mInline code[0m[0m
+- [9mStruck-through[0m[0m
+- [1;3mItalic and bold[0m[0m
+- [9m[1;3mItalic, bold and struck-through[0m[0m[0m[0m
+- [1;3m[30;47mItalic, bold and inline code[0m[1;3m[0m[0m
+- ...
+
+[34mHeaders[0m[0m
+
+1. Header 1 is the brightest.
+2. Header 2 is bold.
+3. Header 3..n look the same.
+
+[1;34mKnown Issues[0m[0m
+
+- No tests!
+- Does not make the code look pretty. Add option to pass program for pretty
+  printing code.
+- No option parsing or options :-|
+- No help command/option :-(
+
+[1;34mLicense[0m[0m
+
+GNU General Public License 3.0
